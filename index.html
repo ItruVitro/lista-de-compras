@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <title>Lista de Compras</title>
 </head>
 <body>
-    <div>
+    <div class="container">
+    <div class="box">
     <h2>Lista de compras</h2>
     <p>digite os itens da sua lista no campo abaixo</p>
-    <input type="text" name="item-da-lista">
-    <button type="submit">
+    <input id="campo-de-texto" type="text" name="item-da-lista">
+    <button id="botao-de-adicionar" type="submit">
         Enviar
     </button>
-    <ul></ul>
+    <ul id="lista-de-itens"></ul>
+    </div>
     </div>
 </body>
 </html>
