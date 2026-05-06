@@ -22,5 +22,31 @@ db.connect(err => {
     }
 });
 
+app.get('/', (req, res) =>{
+    res.send('Servidor rodando');
+});
 
+
+app.post('/itens', (req, res) => {
+    const { nome } = req.body;
+
+    const sql = 'INSERT INTO itens ( nome ) VALUES (?)';
+
+    db.query(sql, [nome], (err, result) => {
+        if(err){
+            console.log(err);
+            return res.status(500).send('Erro ao inserir');
+        }
+
+        res.send('item adicionado com sucesso');
+    })
+});
+
+app.post('/teste', (req, res) =>{
+    res.send('Rota funcionando');
+});
+
+app.listen(3000, () => {
+    console.log('Servidor na porta 3000');
+});
 
