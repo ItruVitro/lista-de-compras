@@ -42,6 +42,23 @@ app.post('/itens', (req, res) => {
     })
 });
 
+
+app.get('/itens', (req, res) =>{
+    
+    const sql = "SELECT * FROM itens";
+
+    db.query(sql, (err, results) => {
+
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Erro ao buscar itens');
+        }
+
+        res.json(results);
+
+    });
+});
+
 app.post('/teste', (req, res) =>{
     res.send('Rota funcionando');
 });
