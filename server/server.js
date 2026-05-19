@@ -59,6 +59,24 @@ app.get('/itens', (req, res) =>{
     });
 });
 
+app.delete('/itens/:id', (req, res) => {
+
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM itens WHERE id = ?';
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Erro ao deletar');
+        };
+        
+        res.send('item deletado');
+    })
+
+
+});
+
 app.post('/teste', (req, res) =>{
     res.send('Rota funcionando');
 });
