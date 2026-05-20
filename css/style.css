@@ -13,8 +13,44 @@
     text-align: center;
 }
 
-.background {
+.card {
     border-radius: 10px;
-    padding: 20px;
     box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
 }
+
+.card-header{
+    background-color: #E5F0FE;
+    padding: 20px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+#lista-de-itens{
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 0px;
+    margin: 4px 8px 12px 8px;
+
+}
+
+.list-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0px;
+    border-radius: 10px;
+    transition: transform 0.2s ease;
+}
+
+.list-item:hover {
+    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transform: translateY(-5px);
+}
+
+.remove-button{
+    margin-left: 90px;
+}
+

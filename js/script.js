@@ -11,7 +11,7 @@ async function carregaItens() {
 
     itens.forEach(item => {
         list.insertAdjacentHTML("afterbegin",
-            `<li data-id="${item.id}">
+            `<li class="list-item" data-id="${item.id}">
             ${item.nome}
             <button class="remove-button">
             excluir
