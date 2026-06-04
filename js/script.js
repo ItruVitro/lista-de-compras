@@ -13,9 +13,15 @@ async function carregaItens() {
         list.insertAdjacentHTML("afterbegin",
             `<li class="list-item" data-id="${item.id}">
             ${item.nome}
+
+            <button class="edit-button">
+            editar
+            </button>
+
             <button class="remove-button">
             excluir
             </button>
+
             </li>`);
     });
 
@@ -49,18 +55,45 @@ addButton.addEventListener('click', async () => {
 });
 
 list.addEventListener('click', async (event) => {
+    const li = event.target.closest("li");
 
-    if (event.target.matches("button")) {
-        let li = event.target.closest("li");
-        let liId = li.dataset.id;
+    if (!li) return;
+    
+    const liId = li.dataset.id;
 
-        console.log(liId);
-        await fetch(`http://localhost:3000/itens/${liId}`, {
-            method: 'DELETE'
-        }); 
+    if (event.target.classList.contains("edit-button")) {
+
+        const novoNome = prompt("Digite o nome do novo item");
+
+        if (novoNome) {
+
+            await fetch(`http://localhost:3000/itens/${liId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nome: novoNome
+                })
+
+            });
+            await carregaItens();
+
+        }
+
+
+
     }
 
-    await carregaItens();
+
+    if (event.target.classList.contains("remove-button")) {
+
+        await fetch(`http://localhost:3000/itens/${liId}`, {
+            method: 'DELETE'
+        });
+        await carregaItens();
+    }
+
 });
 
 carregaItens();

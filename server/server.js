@@ -77,6 +77,27 @@ app.delete('/itens/:id', (req, res) => {
 
 });
 
+app.put('/itens/:id', (req, res) =>{
+
+    const { id } = req.params;
+
+    const { nome } = req.body;
+
+    const sql = 'UPDATE itens SET nome = ? WHERE id = ?';
+
+    db.query(sql, [nome, id], (err, result) => {
+
+        if(err){
+            console.log(err);
+            return res.status(500).send('Erro ao atualizar');
+        }
+
+        res.send('Item atualizado');
+
+    })
+
+})
+
 app.post('/teste', (req, res) =>{
     res.send('Rota funcionando');
 });
