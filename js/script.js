@@ -2,6 +2,39 @@ const field = document.querySelector("#campo-de-texto");
 const addButton = document.querySelector("#botao-de-adicionar");
 const list = document.querySelector("#lista-de-itens");
 
+function criarElemento(tag, texto, id, classe) {
+
+    const elemento = document.createElement(tag);
+
+    if (texto) elemento.textContent = texto;
+    if (id) elemento.dataset.id = id;
+    if (classe) elemento.classList.add(classe);
+
+    return elemento;
+};
+
+async function carregaItens() {
+
+    const resposta = await fetch('http://localhost:3000/itens');
+    const itens = await resposta.json();
+
+    list.innerHTML = '';
+
+    itens.forEach( item =>{
+        const li = criarElemento('li', `${item.nome}`,`${item.id}`,'list-item');
+
+        const botaoEditar = criarElemento('button', 'editar', null, 'edit-button');
+        const botaoExcluir = criarElemento('button', 'excluir', null, 'remove-button');
+
+        li.appendChild(botaoEditar);
+        li.appendChild(botaoExcluir);
+
+        list.appendChild(li);
+        
+    });
+
+};
+/*
 async function carregaItens() {
 
     const resposta = await fetch('http://localhost:3000/itens');
@@ -25,7 +58,7 @@ async function carregaItens() {
             </li>`);
     });
 
-};
+}; */
 
 addButton.addEventListener('click', async () => {
     const valor = field.value;
@@ -58,7 +91,7 @@ list.addEventListener('click', async (event) => {
     const li = event.target.closest("li");
 
     if (!li) return;
-    
+
     const liId = li.dataset.id;
 
     if (event.target.classList.contains("edit-button")) {
