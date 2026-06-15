@@ -15,53 +15,39 @@ function criarElemento(tag, texto, id, classe) {
 
 async function carregaItens() {
 
-    const resposta = await fetch('http://localhost:3000/itens');
-    const itens = await resposta.json();
+    try {
+        const response = await fetch('http://localhost:3000/itens');
 
-    list.innerHTML = '';
+        if (!response.ok) { throw new Error('Erro ao buscar itens'); }
 
-    itens.forEach( item =>{
-        const li = criarElemento('li', `${item.nome}`,`${item.id}`,'list-item');
+        const itens = await response.json();
 
-        const botaoEditar = criarElemento('button', 'editar', null, 'edit-button');
-        const botaoExcluir = criarElemento('button', 'excluir', null, 'remove-button');
+        list.innerHTML = '';
 
-        li.appendChild(botaoEditar);
-        li.appendChild(botaoExcluir);
+        itens.forEach(item => {
+            const li = criarElemento('li', `${item.nome}`, `${item.id}`, 'list-item');
 
-        list.appendChild(li);
-        
-    });
+            const botaoEditar = criarElemento('button', 'editar', null, 'edit-button');
+            const botaoExcluir = criarElemento('button', 'excluir', null, 'remove-button');
+
+            li.appendChild(botaoEditar);
+            li.appendChild(botaoExcluir);
+
+            list.appendChild(li);
+
+        });
+
+
+    }
+    catch (error) {
+        console.error(error);
+    }
 
 };
-/*
-async function carregaItens() {
 
-    const resposta = await fetch('http://localhost:3000/itens');
-    const itens = await resposta.json();
-
-    list.innerHTML = "";
-
-    itens.forEach(item => {
-        list.insertAdjacentHTML("afterbegin",
-            `<li class="list-item" data-id="${item.id}">
-            ${item.nome}
-
-            <button class="edit-button">
-            editar
-            </button>
-
-            <button class="remove-button">
-            excluir
-            </button>
-
-            </li>`);
-    });
-
-}; */
 
 addButton.addEventListener('click', async () => {
-    const valor = field.value;
+    const valor = field.value.trim();
 
     if (valor !== "") {
 
@@ -73,6 +59,8 @@ addButton.addEventListener('click', async () => {
                 },
                 body: JSON.stringify({ nome: valor })
             });
+
+            if (!response.ok) { throw new Error('Erro ao enviar itens'); }
 
             console.log('Status:', response.status);
 
@@ -99,18 +87,24 @@ list.addEventListener('click', async (event) => {
         const novoNome = prompt("Digite o nome do novo item");
 
         if (novoNome) {
+            try {
+                const response = await fetch(`http://localhost:3000/itens/${liId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome: novoNome
+                    })
 
-            await fetch(`http://localhost:3000/itens/${liId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    nome: novoNome
-                })
+                });
 
-            });
-            await carregaItens();
+                if (!response.ok) { throw new Error('Erro ao atualizar itens'); }
+
+                await carregaItens();
+            } catch (error) {
+                console.error(error);
+            }
 
         }
 
@@ -121,10 +115,19 @@ list.addEventListener('click', async (event) => {
 
     if (event.target.classList.contains("remove-button")) {
 
-        await fetch(`http://localhost:3000/itens/${liId}`, {
-            method: 'DELETE'
-        });
-        await carregaItens();
+        try {
+            const response = await fetch(`http://localhost:3000/itens/${liId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) { throw new Error('Erro ao deletar itens'); }
+
+            await carregaItens();
+        }
+        catch (error) {
+            console.log(error);
+        }
+
     }
 
 });
