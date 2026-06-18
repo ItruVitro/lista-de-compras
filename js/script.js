@@ -7,7 +7,7 @@ function criarElemento(tag, texto, id, classe) {
     const elemento = document.createElement(tag);
 
     if (texto) elemento.textContent = texto;
-    if (id) elemento.dataset.id = id;
+    if (id != null) elemento.dataset.id = id;
     if (classe) elemento.classList.add(classe);
 
     return elemento;
@@ -20,7 +20,15 @@ async function carregaItens() {
 
         if (!response.ok) { throw new Error('Erro ao buscar itens'); }
 
-        const itens = await response.json();
+        return response.json();
+    }
+    catch (error) {
+        console.error(error);
+    }
+
+};
+
+function renderizarItens(itens){
 
         list.innerHTML = '';
 
@@ -37,13 +45,14 @@ async function carregaItens() {
 
         });
 
+}
 
-    }
-    catch (error) {
-        console.error(error);
-    }
+async function carregarTela() {
 
-};
+    const itens = await carregaItens();
+    renderizarItens(itens);
+
+}
 
 
 addButton.addEventListener('click', async () => {
